@@ -16,3 +16,6 @@ def loadData(path):
     lidarmap = [ndata[i*info["ncols"]:(i+1)*info["ncols"]] for i in range(int(len(ndata)/info["ncols"]))]
 
     return info, lidarmap
+
+def consolify(path):
+    return '\n'.join([d for d in open(path).read().split('\n') if d is not ''])
