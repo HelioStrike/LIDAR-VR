@@ -61,26 +61,26 @@ info, lidarmap = loadData(path)
 
 squares = planeGrouping(lidarmap, info)
 
-scaling_factor = 10000
+scaling_factor = 1000
 for i in range(info["nrows"]):
     for j in range(info["ncols"]):
         lidarmap[i][j] /= scaling_factor
 
 for s in squares:
-    s[2] += 1
-    s[3] += 1
-
+    s[2] = min(s[2]+1,info["ncols"]-1)
+    s[3] = min(s[3]+1,info["ncols"]-1)
+    
     if (s[0],s[1],lidarmap[s[0]][s[1]]) not in verts:
         verts.append((s[0],s[1],lidarmap[s[0]][s[1]]))
-    if (s[0],s[3],lidarmap[s[0]][s[3]]) not in verts:
-        verts.append((s[0],s[3],lidarmap[s[0]][s[3]]))
-    if (s[2],s[1],lidarmap[s[2]][s[1]]) not in verts:
-        verts.append((s[2],s[1],lidarmap[s[2]][s[1]]))
-    if (s[2],s[3],lidarmap[s[2]][s[3]]) not in verts:
-        verts.append((s[2],s[3],lidarmap[s[2]][s[3]]))
+    if (s[0],s[3],lidarmap[s[0]][s[1]]) not in verts:
+        verts.append((s[0],s[3],lidarmap[s[0]][s[1]]))
+    if (s[2],s[1],lidarmap[s[0]][s[1]]) not in verts:
+        verts.append((s[2],s[1],lidarmap[s[0]][s[1]]))
+    if (s[2],s[3],lidarmap[s[0]][s[1]]) not in verts:
+        verts.append((s[2],s[3],lidarmap[s[0]][s[1]]))
 
-    faces.append((verts.index((s[0],s[1],lidarmap[s[0]][s[1]])), verts.index((s[0],s[3],lidarmap[s[0]][s[3]])), \
-        verts.index((s[2],s[1],lidarmap[s[2]][s[1]])), verts.index((s[2],s[3],lidarmap[s[2]][s[3]]))))
+    faces.append((verts.index((s[0],s[1],lidarmap[s[0]][s[1]])), verts.index((s[0],s[3],lidarmap[s[0]][s[1]])), \
+        verts.index((s[2],s[1],lidarmap[s[0]][s[1]])), verts.index((s[2],s[3],lidarmap[s[0]][s[1]]))))
 
 #create mesh and object
 mesh = bpy.data.meshes.new("map")
