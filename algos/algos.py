@@ -1,3 +1,5 @@
+#Algos to cover lidar data points in less objects
+
 #naive maxpool implementation
 def maxpool(data, pool_size, stride=1):
     out = []
