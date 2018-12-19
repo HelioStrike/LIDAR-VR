@@ -1,17 +1,29 @@
-from utils import *
-from algos import *
+import bpy
+import laspy
 
-path = "../data/LIDAR-DTM-1M-2014-SP06ne/dtm_F0175425_20141215_20141215_mm_units.asc"
-info, lidarmap = loadData(path)
+las_file = laspy.file.File("/home/krypt/Downloads/AK_BrooksCamp_2012_000001/AK_BrooksCamp_2012_000001.las", mode="r")
 
-squares = planeGrouping(lidarmap, info)
-print(squares[:10])
-print(len(squares))
 
-data = maxpool(lidarmap,20,20)
-info["nrows"] = len(data)
-info["ncols"] = len(data[0])
+# mesh arrays
+verts = []  # the vertex array
+faces = []  # the face array
+ 
+# scaling factors
+scaleX = 1e-7
+scaleY = 1e-8
+scaleZ = 1e-3
 
-squares = planeGrouping(data, info)
-print(squares[:10])
-print(len(squares))
+for i in range(int(len(las_file.X)/100)):
+    verts.append((las_file.X[i]*scaleX, las_file.Y[i]*scaleY, las_file.Z[i]*scaleZ))
+
+#create mesh and object
+mesh = bpy.data.meshes.new("wave")
+object = bpy.data.objects.new("wave",mesh)
+ 
+#set mesh location
+object.location = bpy.context.scene.cursor_location
+bpy.context.scene.objects.link(object)
+ 
+#create mesh from python data
+mesh.from_pydata(verts,[],faces)
+mesh.update(calc_edges=True)
