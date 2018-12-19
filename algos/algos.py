@@ -1,5 +1,9 @@
 #Algos to cover lidar data points in less objects
 
+import numpy as np
+import laspy
+import os
+
 #naive maxpool implementation
 def maxpool(data, pool_size, stride=1):
     out = []
@@ -45,3 +49,30 @@ def planeGrouping(lidarmap,info):
                         maskmap[x2][y2] = 1
 
     return squares
+
+def euclideanDistance(x1,y1,z1,x2,y2,z2):
+    return ((x1-x2)**2 + (y1-y2)**2 + (z1-z2)**2)**0.5
+
+#makes sure that all pairs of points are separated by atleast 'radius' distance
+def sparsifyLASFiles(inpath, outpath, radius):
+    inFile = laspy.file.File(inpath, mode="r")
+    points = inFile.points.tolist()
+
+    curr = 0
+    for i1 in range(len(points)):
+        print(curr)
+        for i2 in range(len(points)):
+            if euclideanDistance(points[i1][0][0],points[i1][0][1],points[i1][0][2],points[i2][0][0],points[i2][0][1],points[i2][0][2]) < radius:
+                del points[i2]
+
+            if i1+10 >= len(points) or i2+10 >= len(points):
+                break        
+        if i1+10 >= len(points):
+            break        
+        curr += 1
+
+    if not os.path.isfile(outpath):
+        open(outpath, 'a')
+
+    outFile = laspy.file.File(outpath, mode="w", header=inFile.header)
+    outFile.points = points
