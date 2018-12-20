@@ -23,7 +23,7 @@ def consolify(path):
     return '\n'.join([d for d in open(path).read().split('\n') if d is not ''])
 
 def plotLAS(path, name):
-    las_file = laspy.file.File("/home/krypt/Downloads/AK_BrooksCamp_2012_000015/AK_BrooksCamp_2012_000015.las", mode="r")
+    las_file = laspy.file.File(path, mode="r")
 
     #vertices array
     verts = []
@@ -44,4 +44,4 @@ def plotLAS(path, name):
     bpy.context.scene.objects.link(object)
     
     #create mesh from python data
-    mesh.from_pydata(verts,[],faces)
+    mesh.from_pydata(verts,[],[])

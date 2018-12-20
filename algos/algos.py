@@ -54,22 +54,34 @@ def euclideanDistance(x1,y1,z1,x2,y2,z2):
     return ((x1-x2)**2 + (y1-y2)**2 + (z1-z2)**2)**0.5
 
 #makes sure that all pairs of points are separated by atleast 'radius' distance
-def sparsifyLASFiles(inpath, outpath, radius):
+def sparsifyLASFile(inpath, outpath, numX, numY, numZ):
     inFile = laspy.file.File(inpath, mode="r")
-    points = inFile.points.tolist()
+    points = inFile.points
 
-    curr = 0
-    for i1 in range(len(points)):
-        print(curr)
-        for i2 in range(len(points)):
-            if euclideanDistance(points[i1][0][0],points[i1][0][1],points[i1][0][2],points[i2][0][0],points[i2][0][1],points[i2][0][2]) < radius:
-                del points[i2]
+    nodata = ((-99999999,-99999999))
 
-            if i1+10 >= len(points) or i2+10 >= len(points):
-                break        
-        if i1+10 >= len(points):
-            break        
-        curr += 1
+    minX = min(inFile.X)
+    minY = min(inFile.Y)
+    minZ = min(inFile.Z)
+    maxX = max(inFile.X)
+    maxY = max(inFile.Y)
+    maxZ = max(inFile.Z)
+    diffX = maxX - minX
+    diffY = maxY - minY
+    diffZ = maxZ - minZ
+
+    point_bins = [[[nodata for i in range(numZ+1)] for j in range(numY+1)] \
+     for k in range(numX+1)]
+
+    for point in points:
+        point_bins[int(numX*(point[0][0]-minX)/diffX)][int(numY*(point[0][1]-minY)/diffY)][int(numZ*(point[0][2]-minZ)/diffZ)] = point
+
+    points = []
+    for i in range(numX):
+        for j in range(numY):
+            for k in range(numZ):
+                if point_bins[i][j][k] != nodata:
+                    points.append(point_bins[i][j][k])
 
     if not os.path.isfile(outpath):
         open(outpath, 'a')
