@@ -1,5 +1,6 @@
 import laspy
 
+#loads raster data (.asc format)
 def loadData(path):
     data = open(path).read()
     info = {field.split(' ')[0]:int(field.split(' ')[-1]) for field in data.split('\n')[:6]}
@@ -19,10 +20,9 @@ def loadData(path):
 
     return info, lidarmap
 
-def consolify(path):
-    return '\n'.join([d for d in open(path).read().split('\n') if d is not ''])
-
-def plotLAS(path, name):
+#returns vertices from .las file (point cloud data)
+def getVerts(path):
+    #load the .las  file
     las_file = laspy.file.File(path, mode="r")
 
     #vertices array
@@ -35,6 +35,14 @@ def plotLAS(path, name):
     for i in range(len(las_file.X)):
         verts.append((las_file.X[i]*scaleX + offsetX, las_file.Y[i]*scaleY + offsetY, las_file.Z[i]*scaleZ + offsetZ))
 
+    return verts
+
+#creates a mesh of points in blender using .las file
+def plotLAS(path, name):
+
+    #get vertices
+    verts = getVerts(path)
+
     #create mesh and object
     mesh = bpy.data.meshes.new(name)
     object = bpy.data.objects.new(name,mesh)
@@ -45,3 +53,36 @@ def plotLAS(path, name):
     
     #create mesh from python data
     mesh.from_pydata(verts,[],[])
+
+#creates a map of cubes in blender using .las file
+def plotLASCube(path, size, name="map"):
+    #store scene
+    scene = bpy.context.scene
+
+    #get vertices
+    verts = getVerts(path)
+
+    #store created cubes
+    cubes = []
+
+    for vert in verts:
+        bpy.ops.mesh.primitive_cube_add(location=vert)
+        bpy.context.scene.objects.active.scale = (size,size,size)
+        cubes.append(bpy.context.scene.objects.active)
+        
+    ctx = bpy.context.copy()
+
+    # one of the objects to join
+    ctx['active_object'] = cubes[0]
+
+    ctx['selected_objects'] = cubes
+
+    # we need the scene bases as well for joining
+    ctx['selected_editable_bases'] = [scene.object_bases[cube.name] for cube in cubes]
+
+    #join cubes into one object
+    bpy.ops.object.join(ctx)
+    
+    #relocate and rename the object
+    ctx['active_object'].location = [0,0,0]
+    ctx['active_object'].name = name

@@ -18,10 +18,11 @@ def maxpool(data, pool_size, stride=1):
         out.append(row)
     return out
 
+#given a 2D array, returns rectangles of similar values
 def planeGrouping(lidarmap,info):
     maskmap = [[0 for i in range(info["ncols"])] for j in range(info["nrows"])]
 
-    squares = []
+    rects = []
 
     for x1 in range(0,info["nrows"]):
         for y1 in range(0,info["ncols"]):
@@ -42,18 +43,22 @@ def planeGrouping(lidarmap,info):
                     ys = y2
                     sz = (x2-x1+1)*(y2-y1+1)
 
-                squares.append([x1, y1, xs, ys])
+                rects.append([x1, y1, xs, ys])
 
                 for x2 in range(x1,xs+1):
                     for y2 in range(y1,ys+1):
                         maskmap[x2][y2] = 1
 
-    return squares
+    return rects
 
+#returns distance between (x1,y1,z1) and (x2,y2,z2)
 def euclideanDistance(x1,y1,z1,x2,y2,z2):
     return ((x1-x2)**2 + (y1-y2)**2 + (z1-z2)**2)**0.5
 
 #makes sure that all pairs of points are separated by atleast 'radius' distance
+#numX = maximum number of points in a line along X
+#numY = maximum number of points in a line along Y
+#numZ = maximum number of points in a line along Z
 def sparsifyLASFile(inpath, outpath, numX, numY, numZ):
     inFile = laspy.file.File(inpath, mode="r")
     points = inFile.points
