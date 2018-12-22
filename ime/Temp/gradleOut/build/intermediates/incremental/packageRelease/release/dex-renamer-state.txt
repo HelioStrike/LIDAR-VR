@@ -1,4 +1,0 @@
-#Sat Dec 22 13:55:33 IST 2018
-base.0=/home/krypt/myStuff/sih/ime/ime/Temp/gradleOut/build/intermediates/transforms/dex/release/0
-path.0=classes.dex
-renamed.0=classes.dex

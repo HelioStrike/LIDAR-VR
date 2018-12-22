@@ -25,7 +25,8 @@ public class Controller : MonoBehaviour {
 		transform.localEulerAngles = new Vector3(-rotationY, rotationX, 0);
 	
 		//movement code
-		this.transform.Translate(new Vector3(speed*Input.GetAxis("Horizontal"), 0, speed*Input.GetAxis("Vertical")));
+		this.transform.Translate(new Vector3(speed*Input.GetAxis("Horizontal"), (Input.GetKey("space")? 1:0)*speed, speed*Input.GetAxis("Vertical")));
+
 	}
 	
 }
