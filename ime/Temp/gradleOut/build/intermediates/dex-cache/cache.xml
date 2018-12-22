@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="false"
+        jar="/home/krypt/myStuff/sih/ime/ime/Temp/gradleOut/libs/unity-classes.jar"
+        jumboMode="false"
+        min-sdk-version="19"
+        optimize="true"
+        revision="28.0.3"
+        sha1="679c7d388aaa4a798522e972316f4b6954f803ed">
+        <dex dex="/home/krypt/myStuff/sih/ime/ime/Temp/gradleOut/build/intermediates/transforms/preDex/release/1.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/krypt/.gradle/caches/transforms-1/files-1.1/unitygvr.aar/dcebbce79195de0f5ef79a0423cc1379/jars/classes.jar"
+        jumboMode="false"
+        min-sdk-version="19"
+        optimize="true"
+        revision="28.0.3"
+        sha1="36e70259b99d30e8bd89f2246a70d44a53cb309f">
+        <dex dex="/home/krypt/myStuff/sih/ime/ime/Temp/gradleOut/build/intermediates/transforms/preDex/release/4.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/krypt/.gradle/caches/transforms-1/files-1.1/gvr.aar/47a4603906e4e30e2a067db38a6a9924/jars/classes.jar"
+        jumboMode="false"
+        min-sdk-version="19"
+        optimize="true"
+        revision="28.0.3"
+        sha1="1bdf1c662489164112ea64181ba0df59970899af">
+        <dex dex="/home/krypt/myStuff/sih/ime/ime/Temp/gradleOut/build/intermediates/transforms/preDex/release/3.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/krypt/myStuff/sih/ime/ime/Temp/gradleOut/libs/libprotobuf-java-nano.jar"
+        jumboMode="false"
+        min-sdk-version="19"
+        optimize="true"
+        revision="28.0.3"
+        sha1="fcd53f117550c58490f29c2e27afca051626260d">
+        <dex dex="/home/krypt/myStuff/sih/ime/ime/Temp/gradleOut/build/intermediates/transforms/preDex/release/2.jar" />
+    </item>
+
+</items>
