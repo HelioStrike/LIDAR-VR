@@ -1,4 +1,5 @@
 import laspy
+import numpy as np
 
 #loads raster data (.asc format)
 def loadData(path):
@@ -86,3 +87,31 @@ def plotLASCube(path, size, name="map"):
     #relocate and rename the object
     ctx['active_object'].location = [0,0,0]
     ctx['active_object'].name = name
+
+
+def las2txt(path):
+    verts = getVerts(path)
+    out = str(len(verts))
+
+    verts = np.array(verts) - np.mean(verts, axis=0)
+
+    for v in verts:
+        out += '\n'
+        for x in v:
+            out += str(np.asscalar(x)) + " "
+
+    open(path[:-3] + "txt", 'a').write(out)
+
+def las2off(path):
+    verts = getVerts(path)
+    out = "COFF" + '\n' + str(len(verts)) + " 0 0"
+
+    verts = np.array(verts) - np.mean(verts, axis=0)
+
+    for v in verts:
+        out += '\n'
+        for x in v:
+            out += str(np.asscalar(x)) + " "
+        out += "0 100 100 100"
+
+    open(path[:-3] + "off", 'a').write(out)
