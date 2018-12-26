@@ -4,6 +4,11 @@ import numpy as np
 import laspy
 import os
 
+from utils import *
+
+nodata = ((-99999999,-99999999))
+
+
 #naive maxpool implementation
 def maxpool(data, pool_size, stride=1):
     out = []
@@ -17,6 +22,7 @@ def maxpool(data, pool_size, stride=1):
             row.append(maxm)
         out.append(row)
     return out
+
 
 #given a 2D array, returns rectangles of similar values
 def planeGrouping(lidarmap,info):
@@ -51,19 +57,18 @@ def planeGrouping(lidarmap,info):
 
     return rects
 
+
 #returns distance between (x1,y1,z1) and (x2,y2,z2)
 def euclideanDistance(x1,y1,z1,x2,y2,z2):
     return ((x1-x2)**2 + (y1-y2)**2 + (z1-z2)**2)**0.5
 
-#makes sure that all pairs of points are separated by atleast 'radius' distance
+
 #numX = maximum number of points in a line along X
 #numY = maximum number of points in a line along Y
 #numZ = maximum number of points in a line along Z
-def sparsify(inpath, outpath, numX, numY, numZ):
+def sparsify(inpath, numX, numY, numZ):
     inFile = laspy.file.File(inpath, mode="r")
     points = inFile.points
-
-    nodata = ((-99999999,-99999999))
 
     minX = min(inFile.X)
     minY = min(inFile.Y)
@@ -90,3 +95,33 @@ def sparsify(inpath, outpath, numX, numY, numZ):
 
     return point_bins, points
 
+
+def constructFaces(inpath, numX, numY, numZ):
+    point_bins, points = sparsify(inpath, numX, numY, numZ)
+    faces = []
+
+    cube2 = [nodata for i in range(8)]
+    chek = [[0,1,4,5],[0,1,2,3],[0,2,4,6],[0,1,6,7],[0,2,5,7],[1,3,4,6],[2,3,4,5],[0,3,4,7],[1,2,5,6]]
+
+    for x in range(0, numX-1, 2):
+        for y in range(0, numY-1, 2):
+            for z in range(0, numZ-1, 2):
+                
+                for x1 in range(2):
+                    for y1 in range(2):
+                        for z1 in range(2):
+                            if point_bins[x+x1][y+y1][z+z1] is not nodata:
+                                cube2[x1+y1*2+z1*4] = points.index(point_bins[x+x1][y+y1][z+z1])
+                            else:
+                                cube2[x1+y1*2+z1*4] = -1
+                    
+                for f in chek:
+                    yee = True
+                    for p in range(4):
+                        if cube2[f[p]] == -1:
+                            yee = False
+                            break
+                    if yee:
+                        faces.append((cube2[f[0]],cube2[f[1]],cube2[f[2]],cube2[f[3]]))
+    
+    return faces, points

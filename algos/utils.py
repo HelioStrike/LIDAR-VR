@@ -1,5 +1,7 @@
 import laspy
 import numpy as np
+import os
+from algos import *
 
 #loads raster data (.asc format)
 def loadData(path):
@@ -93,8 +95,20 @@ def savePointsLAS(outpath, points):
     if not os.path.isfile(outpath):
         open(outpath, 'a')
 
-    outFile = laspy.file.File(outpath, mode="w", header=inFile.header)
-    outFile.points = points
+    outFile = laspy.file.File(outpath, mode="w", header=laspy.header.Header())
+    x = y = z = []
+    for p in points:
+        x.append(p[0][0])
+        y.append(p[0][1])
+        z.append(p[0][2])
+    outFile.X = x
+    outFile.Y = y
+    outFile.Z = z
+
+
+def sparsifyLASFile(inpath, outpath, numX, numY, numZ):
+    _, points = sparsify(inpath, numX, numY, numZ)
+    savePointsLAS(outpath, points)
 
 def las2txt(path):
     verts = getVerts(path)
