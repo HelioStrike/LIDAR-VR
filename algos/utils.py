@@ -89,6 +89,13 @@ def plotLASCube(path, size, name="map"):
     ctx['active_object'].name = name
 
 
+def savePointsLAS(outpath, points):
+    if not os.path.isfile(outpath):
+        open(outpath, 'a')
+
+    outFile = laspy.file.File(outpath, mode="w", header=inFile.header)
+    outFile.points = points
+
 def las2txt(path):
     verts = getVerts(path)
     out = str(len(verts))

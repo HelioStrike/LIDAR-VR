@@ -59,7 +59,7 @@ def euclideanDistance(x1,y1,z1,x2,y2,z2):
 #numX = maximum number of points in a line along X
 #numY = maximum number of points in a line along Y
 #numZ = maximum number of points in a line along Z
-def sparsifyLASFile(inpath, outpath, numX, numY, numZ):
+def sparsify(inpath, outpath, numX, numY, numZ):
     inFile = laspy.file.File(inpath, mode="r")
     points = inFile.points
 
@@ -88,8 +88,5 @@ def sparsifyLASFile(inpath, outpath, numX, numY, numZ):
                 if point_bins[i][j][k] != nodata:
                     points.append(point_bins[i][j][k])
 
-    if not os.path.isfile(outpath):
-        open(outpath, 'a')
+    return point_bins, points
 
-    outFile = laspy.file.File(outpath, mode="w", header=inFile.header)
-    outFile.points = points
