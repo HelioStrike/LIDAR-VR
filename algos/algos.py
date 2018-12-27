@@ -63,6 +63,7 @@ def euclideanDistance(x1,y1,z1,x2,y2,z2):
     return ((x1-x2)**2 + (y1-y2)**2 + (z1-z2)**2)**0.5
 
 
+nodata = ((-99999999,-99999999))
 #numX = maximum number of points in a line along X
 #numY = maximum number of points in a line along Y
 #numZ = maximum number of points in a line along Z
@@ -84,34 +85,42 @@ def sparsify(inpath, numX, numY, numZ):
      for k in range(numX+1)]
 
     for point in points:
-        point_bins[int(numX*(point[0][0]-minX)/diffX)][int(numY*(point[0][1]-minY)/diffY)][int(numZ*(point[0][2]-minZ)/diffZ)] = point
+        x_ = int(numX*(point[0][0]-minX)/diffX)
+        y_ = int(numY*(point[0][1]-minY)/diffY)
+        z_ = int(numZ*(point[0][2]-minZ)/diffZ)
+        point_bins[x_][y_][z_] = ((x_*diffX/diffZ,y_*diffY/diffZ,z_),)
+        #point_bins[x_][y_][z_] = ((int(x_*(maxX-minX)/numX),int(y_*(maxY-minY)/numY),int(z_*(maxZ-minZ)/numZ)),)
 
     points = []
+    indices = {}
+    curr = 0
     for i in range(numX):
         for j in range(numY):
             for k in range(numZ):
                 if point_bins[i][j][k] != nodata:
                     points.append(point_bins[i][j][k])
+                    indices[str(point_bins[i][j][k])] = curr
+                    curr += 1
 
-    return point_bins, points
+    return point_bins, points, indices
 
 
 def constructFaces(inpath, numX, numY, numZ):
-    point_bins, points = sparsify(inpath, numX, numY, numZ)
+    point_bins, points, indices = sparsify(inpath, numX, numY, numZ)
     faces = []
 
-    cube2 = [nodata for i in range(8)]
-    chek = [[0,1,4,5],[0,1,2,3],[0,2,4,6],[0,1,6,7],[0,2,5,7],[1,3,4,6],[2,3,4,5],[0,3,4,7],[1,2,5,6]]
+    chek = [[0,1,5,4],[0,1,3,2],[0,2,6,4],[0,1,7,6],[0,2,7,5],[1,3,6,4],[2,3,5,4],[0,3,7,4],[1,2,6,5]]
+    
+    for x in range(0, numX-1):
+        for y in range(0, numY-1):
+            for z in range(0, numZ-1):
 
-    for x in range(0, numX-1, 2):
-        for y in range(0, numY-1, 2):
-            for z in range(0, numZ-1, 2):
-                
+                cube2 = [-1 for i in range(8)]                
                 for x1 in range(2):
                     for y1 in range(2):
                         for z1 in range(2):
                             if point_bins[x+x1][y+y1][z+z1] is not nodata:
-                                cube2[x1+y1*2+z1*4] = points.index(point_bins[x+x1][y+y1][z+z1])
+                                cube2[x1+y1*2+z1*4] = indices[str(point_bins[x+x1][y+y1][z+z1])]
                             else:
                                 cube2[x1+y1*2+z1*4] = -1
                     
