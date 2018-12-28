@@ -64,6 +64,7 @@ def euclideanDistance(x1,y1,z1,x2,y2,z2):
 
 
 nodata = ((-99999999,-99999999))
+#inpath = path of .las file
 #numX = maximum number of points in a line along X
 #numY = maximum number of points in a line along Y
 #numZ = maximum number of points in a line along Z
@@ -105,6 +106,10 @@ def sparsify(inpath, numX, numY, numZ):
     return point_bins, points, indices
 
 
+#inpath = path of .las file
+#numX = maximum number of points in a line along X
+#numY = maximum number of points in a line along Y
+#numZ = maximum number of points in a line along Z
 def constructFaces(inpath, numX, numY, numZ):
     point_bins, points, indices = sparsify(inpath, numX, numY, numZ)
     faces = []

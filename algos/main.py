@@ -3,11 +3,9 @@ from utils import *
 from algos import *
 
 
-sparsifyLASFile("/home/krypt/Downloads/AK_BrooksCamp_2012_000001/AK_BrooksCamp_2012_000001_1.las",\
-    "/home/krypt/Downloads/AK_BrooksCamp_2012_000001/AK_BrooksCamp_2012_000001_50.las",50,50,50)
+sparsifyLASFile("/home/krypt/Downloads/velodyne/Velodyne1_001.las",\
+    "/home/krypt/Downloads/velodyne/Velodyne1_001_100.las",100,100,100)
 
-faces,points = constructFaces("/home/krypt/Downloads/AK_BrooksCamp_2012_000001/AK_BrooksCamp_2012_000001_25.las",10,10,10)
-print(points)
 
 '''
 sparsifyLASFile("/home/krypt/Downloads/AK_BrooksCamp_2012_000001/AK_BrooksCamp_2012_000001_25.las",\

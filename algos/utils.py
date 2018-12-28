@@ -91,6 +91,7 @@ def plotLASCube(path, size, name="map"):
     ctx['active_object'].name = name
 
 
+#saves as .las given points
 def savePointsLAS(somepath, outpath, points):
     someFile = laspy.file.File(somepath, mode="r")
 
@@ -98,12 +99,16 @@ def savePointsLAS(somepath, outpath, points):
         open(outpath, 'a')
 
     outFile = laspy.file.File(outpath, mode="w", header=someFile.header)
-    outFile.points = points
+    pts = []
+    for p in points:
+        pts.append(((p[0][0],p[0][1],p[0][2],0,0,0,0,0,0,0),))
+    outFile.points = pts
 
 
+#applies 'sparsify' on .las file
 def sparsifyLASFile(inpath, outpath, numX, numY, numZ):
-    _, points = sparsify(inpath, numX, numY, numZ)
-    savePointsLAS(outpath, points)
+    _, points, _ = sparsify(inpath, numX, numY, numZ)
+    savePointsLAS(inpath, outpath, points)
 
 def las2txt(path):
     verts = getVerts(path)
@@ -118,6 +123,7 @@ def las2txt(path):
 
     open(path[:-3] + "txt", 'a').write(out)
 
+#converts .las to .off file
 def las2off(path):
     verts = getVerts(path)
     out = "COFF" + '\n' + str(len(verts)) + " 0 0"
