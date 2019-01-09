@@ -55,6 +55,8 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\Controller.cs" />
      <Compile Include="Assets\Scripts\PointCloudRenderer.cs" />
+     <None Include="Assets\Resources\Hoboken_001_200.txt" />
+     <None Include="Assets\Shaders\NewUnlitShader.shader" />
  <Reference Include="UnityEditor.StandardEvents">
  <HintPath>/home/krypt/myStuff/sih/ime/test2/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
  </Reference>

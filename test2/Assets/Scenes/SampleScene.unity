@@ -140,23 +140,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c82de18e761f14a50880af5f34f88eec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numX: 50
-  numY: 50
-  numZ: 50
-  path: Assets/Resources/Hoboken_001_200.off
+  numX: 150
+  numY: 150
+  numZ: 150
+  path: /mylinks/vrenderr/pointcloud.off
+  mat: {fileID: 2100000, guid: 4cadfa7765ca04bb68a39ed047e339d3, type: 2}
+  shader: {fileID: 4800000, guid: 46c0111dd19144a548c370c61171c8c8, type: 3}
 --- !u!4 &18278491
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 18278489}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: -0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 270, y: 0, z: 0}
 --- !u!1 &170076733
 GameObject:
   m_ObjectHideFlags: 0
@@ -345,8 +347,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
-  m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  m_Materials: []
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -404,4 +405,4 @@ MonoBehaviour:
   maximumX: 360
   minimumY: -60
   maximumY: 60
-  speed: 10
+  speed: 3

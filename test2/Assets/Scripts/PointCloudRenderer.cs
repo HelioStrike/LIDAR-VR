@@ -10,6 +10,9 @@ public class PointCloudRenderer : MonoBehaviour {
 
 	public string path;
 
+	public Material mat;
+
+	public Shader shader;
 	public string point2str(int i, int j, int k) {
 		string str = "";
 		int[] a = {i,j,k};
@@ -22,11 +25,29 @@ public class PointCloudRenderer : MonoBehaviour {
 				c++;
 			}
 
-			for(int y = 0; y < 4-c; y++) { str += "0";}
+			for(int y = 0; y < 8-c; y++) { str += "0";}
 			str += a[x].ToString();
 		}
 
 		return str;
+	}
+
+	public Vector3 str2point(string str) {
+		return new Vector3(int.Parse(str.Substring(0,8)),int.Parse(str.Substring(8,16)),int.Parse(str.Substring(16,24)));
+	}
+
+	public Color height2color(float y, float minY, float maxY) {
+		int r1 = 1;
+		int g1 = 1;
+		int b1 = 1;
+
+		int r2 = 0;
+		int g2 = 0;
+		int b2 = 1;
+
+		float idk = (y-minY)/(maxY-minY);
+
+		return new Color((r2-r1)*idk+r1, (g2-g1)*idk+g1, (b2-b1)*idk+b1);
 	}
 
 	// Use this for initialization
@@ -72,6 +93,7 @@ public class PointCloudRenderer : MonoBehaviour {
 		float diffZ = Math.Abs(minZ - maxZ);
 
 		int numPoints = 0;
+
 		for(int i = 2; i < totPoints+2; i++)
 		{
 			string[] divs = lines[i].Split(' ');
@@ -81,11 +103,13 @@ public class PointCloudRenderer : MonoBehaviour {
 			currZ = numZ*(float.Parse(divs[2]) - minZ)/diffZ;
 
 			if(point_bins[(int)currX,(int)currY,(int)currZ] == 0) { numPoints++;}
+			
 			point_bins[(int)currX,(int)currY,(int)currZ] = 1;
 		} 
 
 		int curr = 0;
 		Vector3[] points = new Vector3[numPoints];
+
         Dictionary<string, int> point2index = new Dictionary<string, int>();
 		
 		for(int i = 0; i < numX; i++)
@@ -105,6 +129,7 @@ public class PointCloudRenderer : MonoBehaviour {
 				}
 			}
 		}
+
 
 		ArrayList tri = new ArrayList();
 		int[] triangles;
@@ -164,14 +189,29 @@ public class PointCloudRenderer : MonoBehaviour {
 			curr++;
 		}
 
+		Vector2[] uvs = new Vector2[points.Length];
+		Color[] colors = new Color[points.Length];
+		for(int i = 0; i < points.Length; i++)
+		{
+			uvs[i] = new Vector2(points[i].x, points[i].z);
+			colors[i] = height2color(points[i].z,0,numZ);
+		}
+
+
 		gameObject.AddComponent<MeshFilter>();
-        gameObject.AddComponent<MeshRenderer>();
+		gameObject.AddComponent<MeshRenderer>();
+		mat.shader = shader;
+		this.GetComponent<MeshRenderer>().material = mat;
         Mesh mesh = GetComponent<MeshFilter>().mesh;
 
         mesh.Clear();
 
         mesh.vertices = points;
+		mesh.uv = uvs;
+		mesh.colors = colors;
         mesh.triangles =  triangles;
+     	mesh.RecalculateNormals();
+
 	}
 	
 	// Update is called once per frame
