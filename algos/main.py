@@ -3,13 +3,14 @@ from utils import *
 from algos import *
 
 
-sparsifyLASFile("/home/krypt/Downloads/velodyne/Velodyne1_001.las",\
-    "/home/krypt/Downloads/velodyne/Velodyne1_001_100.las",100,100,100)
+sparsifyLASFile("/home/krypt/Downloads/velodyne/Hoboken_001.las",\
+    "/home/krypt/Downloads/velodyne/Hoboken_001_400.las",400,400,400)
 
+inFile = laspy.file.File("/home/krypt/Downloads/velodyne/Hoboken_001_400.las", mode="r")
+print(len(inFile.X))
 
 '''
-sparsifyLASFile("/home/krypt/Downloads/AK_BrooksCamp_2012_000001/AK_BrooksCamp_2012_000001_25.las",\
-    "/home/krypt/Downloads/AK_BrooksCamp_2012_000001/AK_BrooksCamp_2012_000001_10.las",10,10,10)
+las2off("/home/krypt/Downloads/velodyne/Hoboken_001_200.las")
 
 inFile = laspy.file.File("/home/krypt/Downloads/AK_BrooksCamp_2012_000001/AK_BrooksCamp_2012_000001.las", mode="r")
 print(len(inFile.X))
